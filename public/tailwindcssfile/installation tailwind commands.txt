@@ -1,0 +1,51 @@
+installation tailwind css
+ bun install -D tailwindcss postcss autoprefixer @tailwindcss/postcss
+
+index.css
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display&family=Lato&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+create postcss.config.js
+
+export default {
+  plugins: {
+    '@tailwindcss/postcss': {}, // ✅ NEW plugin instead of tailwindcss
+    autoprefixer: {},
+  },
+}
+
+
+create tailwind.config.js
+
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    "./src/**/*.{js,jsx,ts,tsx,html}", // React / Vite / etc.
+  ],
+  theme: {
+    extend: {
+      fontFamily: {
+        playfair: ['"Playfair Display"', 'serif'],
+        lato: ['Lato', 'sans-serif'],
+        poppins: ['Poppins', 'sans-serif'],
+      },
+    },
+  },
+  plugins: [],
+}
+
+vite.config.js
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
+
+// https://vite.dev/config/
+export default defineConfig({
+  plugins: [react(), tailwindcss()],
+})
+
