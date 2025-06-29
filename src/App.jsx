@@ -24,6 +24,7 @@ import ProductsPage from "./components/admin/ProductsPage";
 import CreateProductPage from "./components/admin/CreateProductPage";
 import EditProductPage from "./components/admin/EditProductPage";
 import { ProductProvider } from "./context/ProductContext";
+import OrderDetailPage from "./components/admin/OrderDetailPage";
 // import ProductDetail from './components/pages/WomensClothes/ProductDetail'
 
 function App() {
@@ -57,6 +58,7 @@ function App() {
         { path: "products", element: <ProductsPage /> },
         { path: "products/create", element: <CreateProductPage /> },
         { path: "products/edit/:productId", element: <EditProductPage /> },
+        { path: "orders/:orderId", element: <OrderDetailPage /> },
         // more admin pages e.g. orders/products/customers will go here
       ],
     },

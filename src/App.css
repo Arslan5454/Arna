@@ -1,0 +1,23 @@
+/* App.css ya kisi global CSS file mein paste karein */
+
+@media print {
+  /* Sab kuch hide kar dein */
+  body * {
+    visibility: hidden;
+  }
+
+  /* Sirf printable invoice ko visible kar dein */
+  .printable-invoice,
+  .printable-invoice * {
+    visibility: visible;
+  }
+
+  /* Printable invoice ko page ke top pe layen aur full width dein */
+  .printable-invoice {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px; /* optional: agar print mein spacing chahte hain */
+  }
+}
