@@ -15,6 +15,7 @@ import PrintedCloth from "./components/pages/WomensClothes/PrintedCloth";
 import FeaturedCloth from "./components/pages/WomensClothes/FeaturedCloth";
 import LawnCloth from "./components/pages/WomensClothes/LawnCloth";
 import NotFound from "./components/pages/NotFound";
+import { CartProvider } from "./context/CartContext";
 // import ProductDetail from './components/pages/WomensClothes/ProductDetail'
 
 function App() {
@@ -42,7 +43,9 @@ function App() {
 
   return (
     <>
-      <RouterProvider router={router} />
+      <CartProvider>
+        <RouterProvider router={router} />
+      </CartProvider>
     </>
   );
 }

@@ -1,26 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Dialog } from "@headlessui/react";
 import { useNavigate } from "react-router-dom";
+import { CartContext } from "../../context/CartContext";
 import CartItemCard from "./CartItemCard";
 
-const CartPopup = ({ isOpen, onClose, cartItems, setCartItems }) => {
+const CartPopup = ({ isOpen, onClose, cartItems }) => {
   const navigate = useNavigate();
-
-  const handleCartQuantityChange = (index, delta) => {
-    setCartItems((prev) =>
-      prev
-        .map((item, idx) =>
-          idx === index
-            ? { ...item, quantity: Math.max(1, item.quantity + delta) }
-            : item
-        )
-        .filter((item) => item.quantity > 0)
-    );
-  };
-
-  const handleRemoveItem = (index) => {
-    setCartItems((prev) => prev.filter((_, idx) => idx !== index));
-  };
+  const { updateQuantity, removeFromCart } = useContext(CartContext); // ✅ context
 
   const totalPrice = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
@@ -40,12 +26,12 @@ const CartPopup = ({ isOpen, onClose, cartItems, setCartItems }) => {
             {cartItems.length === 0 ? (
               <p className="text-gray-600 text-center py-12">Your cart is empty.</p>
             ) : (
-              cartItems.map((item, idx) => (
+              cartItems.map((item) => (
                 <CartItemCard
-                  key={idx}
+                  key={item.id}
                   item={item}
-                  onQuantityChange={(delta) => handleCartQuantityChange(idx, delta)}
-                  onRemove={() => handleRemoveItem(idx)}
+                  onQuantityChange={(delta) => updateQuantity(item.id, delta)} // ✅ global function
+                  onRemove={() => removeFromCart(item.id)}                    // ✅ global function
                 />
               ))
             )}

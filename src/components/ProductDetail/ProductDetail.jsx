@@ -1,5 +1,6 @@
 import { useParams, useLocation } from "react-router-dom";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { CartContext } from "../../context/CartContext";  // ✅ import context
 import lawnItems from "../../data/lawnData";
 import printedItems from "../../data/printedData";
 import featuredItems from "../../data/featuredData";
@@ -11,6 +12,7 @@ import CartPopup from "./CartPopup";
 const ProductDetail = () => {
   const { id } = useParams();
   const location = useLocation();
+  const { cartItems, addToCart } = useContext(CartContext);  // ✅ use context
 
   // ✅ Infer collection from current path:
   let collection;
@@ -29,7 +31,6 @@ const ProductDetail = () => {
   const [isAddToCartOpen, setIsAddToCartOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [quantity, setQuantity] = useState(1);
-  const [cartItems, setCartItems] = useState([]);
 
   if (!product)
     return <div className="py-20 text-center">Product not found!</div>;
@@ -37,22 +38,11 @@ const ProductDetail = () => {
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   const handleAddToCart = () => {
-    const existingIndex = cartItems.findIndex(
-      (item) => item.title === product.title
-    );
-    let updatedCart;
     const cartItem = {
       ...product,
       image: Array.isArray(product.images) ? product.images[0] : product.images,
-      quantity,
     };
-    if (existingIndex !== -1) {
-      updatedCart = [...cartItems];
-      updatedCart[existingIndex].quantity += quantity;
-    } else {
-      updatedCart = [...cartItems, cartItem];
-    }
-    setCartItems(updatedCart);
+    addToCart(cartItem, quantity);  // ✅ use context addToCart
     setQuantity(1);
     setIsAddToCartOpen(true);
   };
@@ -89,7 +79,6 @@ const ProductDetail = () => {
         isOpen={isCartOpen}
         onClose={() => setIsCartOpen(false)}
         cartItems={cartItems}
-        setCartItems={setCartItems}
       />
     </>
   );
