@@ -16,6 +16,7 @@ import FeaturedCloth from "./components/pages/WomensClothes/FeaturedCloth";
 import LawnCloth from "./components/pages/WomensClothes/LawnCloth";
 import NotFound from "./components/pages/NotFound";
 import { CartProvider } from "./context/CartContext";
+import Checkout from "./components/pages/Checkout";
 // import ProductDetail from './components/pages/WomensClothes/ProductDetail'
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
       { path: "/printed", element: <PrintedCloth /> },
       { path: "/featured", element: <FeaturedCloth /> },
       { path: "/lawn", element: <LawnCloth /> },
+      {path:'/checkout' , element: <Checkout />}
     ]
   }
   ]);

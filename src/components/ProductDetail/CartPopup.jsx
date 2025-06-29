@@ -1,17 +1,12 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Dialog } from "@headlessui/react";
 import { useNavigate } from "react-router-dom";
-import { CartContext } from "../../context/CartContext";
 import CartItemCard from "./CartItemCard";
+import { useCart } from "../../context/CartContext"; // ✅ useCart instead of CartContext
 
-const CartPopup = ({ isOpen, onClose, cartItems }) => {
+const CartPopup = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
-  const { updateQuantity, removeFromCart } = useContext(CartContext); // ✅ context
-
-  const totalPrice = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
+  const { cartItems, updateQuantity, removeFromCart, totalPrice } = useCart(); // ✅ useCart hook
 
   return (
     <Dialog open={isOpen} onClose={onClose} className="relative z-50">
@@ -30,8 +25,8 @@ const CartPopup = ({ isOpen, onClose, cartItems }) => {
                 <CartItemCard
                   key={item.id}
                   item={item}
-                  onQuantityChange={(delta) => updateQuantity(item.id, delta)} // ✅ global function
-                  onRemove={() => removeFromCart(item.id)}                    // ✅ global function
+                  onQuantityChange={(delta) => updateQuantity(item.id, delta)} // ✅ from context
+                  onRemove={() => removeFromCart(item.id)}                    // ✅ from context
                 />
               ))
             )}

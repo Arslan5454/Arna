@@ -1,6 +1,6 @@
 import { useParams, useLocation } from "react-router-dom";
-import React, { useState, useContext } from "react";
-import { CartContext } from "../../context/CartContext";  // ✅ import context
+import React, { useState } from "react";
+import { useCart } from "../../context/CartContext";  // ✅ use custom hook
 import lawnItems from "../../data/lawnData";
 import printedItems from "../../data/printedData";
 import featuredItems from "../../data/featuredData";
@@ -12,15 +12,13 @@ import CartPopup from "./CartPopup";
 const ProductDetail = () => {
   const { id } = useParams();
   const location = useLocation();
-  const { cartItems, addToCart } = useContext(CartContext);  // ✅ use context
+  const { cartItems, addToCart } = useCart();  // ✅ correct usage
 
-  // ✅ Infer collection from current path:
   let collection;
   if (location.pathname.startsWith("/printed")) collection = "printed";
   else if (location.pathname.startsWith("/lawn")) collection = "lawn";
   else if (location.pathname.startsWith("/featured")) collection = "featured";
 
-  // ✅ Select correct data array:
   let data;
   if (collection === "printed") data = printedItems;
   else if (collection === "lawn") data = lawnItems;
@@ -42,7 +40,7 @@ const ProductDetail = () => {
       ...product,
       image: Array.isArray(product.images) ? product.images[0] : product.images,
     };
-    addToCart(cartItem, quantity);  // ✅ use context addToCart
+    addToCart(cartItem, quantity);  // ✅ call global context function
     setQuantity(1);
     setIsAddToCartOpen(true);
   };
