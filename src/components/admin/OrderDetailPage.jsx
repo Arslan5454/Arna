@@ -165,14 +165,38 @@ const OrderDetailPage = () => {
       </div>
 
       {/* Printable Invoice */}
-      <div className="hidden print:block printable-invoice mt-10">
-        <h1 className="text-2xl font-bold mb-4">Invoice - Order #{order.id}</h1>
+      <div className="hidden print:block printable-invoice border p-8 max-w-3xl mx-auto text-sm leading-relaxed">
+        {/* Header with logo and invoice title */}
+        <div className="flex justify-between items-center mb-8 border-b pb-4">
+          <div>
+            <h1 className="text-2xl font-bold text-rose-600">
+              Your Store Name
+            </h1>
+            <p className="text-gray-600 text-xs">www.yourstore.com</p>
+          </div>
+          <div className="text-right">
+            <h2 className="text-xl font-bold">INVOICE</h2>
+            <p className="text-gray-600">Order #: {order.id}</p>
+            <p className="text-gray-600">Date: {order.createdAt}</p>
+          </div>
+        </div>
 
-        <p className="mb-2">Customer: {order.customer.name}</p>
-        <p className="mb-2">Phone: {order.customer.phone}</p>
-        <p className="mb-2">Address: {order.shippingAddress}</p>
+        {/* Customer and shipping info */}
+        <div className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <h3 className="font-bold mb-1">Billing To:</h3>
+            <p className="text-gray-700">{order.customer.name}</p>
+            <p className="text-gray-700">{order.customer.phone}</p>
+            <p className="text-gray-700">{order.customer.email}</p>
+          </div>
+          <div>
+            <h3 className="font-bold mb-1">Shipping Address:</h3>
+            <p className="text-gray-700">{order.shippingAddress}</p>
+          </div>
+        </div>
 
-        <table className="min-w-full border mt-4 text-left">
+        {/* Ordered items */}
+        <table className="w-full border text-left mb-6">
           <thead>
             <tr className="bg-gray-100">
               <th className="p-2 border">Product</th>
@@ -193,11 +217,21 @@ const OrderDetailPage = () => {
           </tbody>
         </table>
 
-        <div className="mt-4 space-y-1">
+        {/* Totals */}
+        <div className="text-right space-y-1">
           <p>Subtotal: PKR {subtotal}</p>
-          <p>Discount: PKR {order.discount}</p>
+          <p>Discount: - PKR {order.discount}</p>
           <p>Shipping: PKR {order.shippingCharges}</p>
-          <p className="font-bold">Grand Total: PKR {grandTotal}</p>
+          <p className="font-bold text-lg text-rose-600 border-t pt-2">
+            Grand Total: PKR {grandTotal}
+          </p>
+        </div>
+
+        {/* Footer */}
+        <div className="mt-8 text-center text-xs text-gray-500 border-t pt-4">
+          Thank you for shopping with Your Store Name!
+          <br />
+          For any queries, contact support@yourstore.com
         </div>
       </div>
     </div>
