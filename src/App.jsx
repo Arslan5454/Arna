@@ -9,11 +9,12 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import Home from "./components/pages/Home";
-import UnstitchedCategories from "./components/pages/UnstitchedCategories ";
+import UnstitchedCategories from "./components/pages/UnstitchedCategories";
 import ProductDetail from "./components/ProductDetail/ProductDetail";
 import PrintedCloth from "./components/pages/WomensClothes/PrintedCloth";
 import FeaturedCloth from "./components/pages/WomensClothes/FeaturedCloth";
 import LawnCloth from "./components/pages/WomensClothes/LawnCloth";
+import NotFound from "./components/pages/NotFound";
 // import ProductDetail from './components/pages/WomensClothes/ProductDetail'
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
     {
     path: '/',
     element: <AppLayout />,
+    errorElement: <NotFound />,
     children: [
       { path: "/", element: <Home /> },
       { path: "/about", element: <About /> },
