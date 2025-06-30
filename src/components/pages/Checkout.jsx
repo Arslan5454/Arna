@@ -22,10 +22,59 @@ const CheckoutPage = () => {
   const handleCheckboxChange = (e) =>
     setForm({ ...form, sameAsShipping: e.target.checked });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Order placed!", form, cartItems);
-    alert("Order placed! (Demo)");
+    if (cartItems.length === 0) {
+      alert("Your cart is empty. Add items before placing an order.");
+      return;
+    }
+
+    const shippingCharges = calculateShippingCharges();
+    const discount = calculateDiscount();
+    const finalTotal = totalPrice + shippingCharges - discount;
+
+    const orderData = {
+      form: {
+        name: form.name,
+        email: form.email,
+        phone: form.phone,
+        shippingAddress: form.shippingAddress,
+        billingAddress: form.sameAsShipping
+          ? form.shippingAddress
+          : form.billingAddress,
+        sameAsShipping: form.sameAsShipping,
+        shippingMethod: form.shippingMethod,
+        paymentMethod: form.paymentMethod,
+        coupon: form.coupon,
+        distanceMiles: parseFloat(form.distanceMiles) || 0,
+      },
+      amounts: {
+        shippingCharges: shippingCharges,
+        discount: discount,
+        subtotal: totalPrice,
+        totalAmount: finalTotal,
+      },
+      cartItems: cartItems,
+    };
+
+    try {
+      const res = await fetch("http://localhost/api/orders.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(orderData),
+      });
+      const result = await res.json();
+      if (res.ok) {
+        alert("Order placed successfully!");
+        console.log("Order ID:", result.order_id);
+      } else {
+        alert("Error: " + result.error);
+      }
+    } catch (err) {
+      console.log(err);
+      alert("Failed to place order");
+    }
+    console.log("Sending order:", orderData);
   };
 
   const calculateDiscount = () => {
@@ -56,7 +105,9 @@ const CheckoutPage = () => {
     <div className="max-w-7xl mx-auto py-12 px-4 md:px-8 grid grid-cols-1 md:grid-cols-2 gap-8 bg-white">
       {/* LEFT: CHECKOUT FORM */}
       <div className="space-y-6 border p-6 rounded shadow">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">Checkout Details</h2>
+        <h2 className="text-2xl font-bold text-gray-800 mb-4">
+          Checkout Details
+        </h2>
 
         <form className="space-y-4" onSubmit={handleSubmit}>
           <input
@@ -114,7 +165,9 @@ const CheckoutPage = () => {
               checked={form.sameAsShipping}
               onChange={handleCheckboxChange}
             />
-            <label className="text-gray-700">Billing address same as shipping</label>
+            <label className="text-gray-700">
+              Billing address same as shipping
+            </label>
           </div>
 
           {!form.sameAsShipping && (
