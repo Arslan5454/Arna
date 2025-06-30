@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { useParams } from "react-router-dom";
-import { dummyOrders } from "../../data/dummyOrders";
+import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { dummyOrders } from '../../data/dummyOrders';
 
 const OrderDetailPage = () => {
   const { orderId } = useParams();
@@ -131,7 +131,7 @@ const OrderDetailPage = () => {
           <span>Shipping:</span> <span>PKR {order.shippingCharges}</span>
         </div>
         <div className="flex justify-between font-bold border-t pt-2">
-          <span>Grand Total:</span>{" "}
+          <span>Grand Total:</span>{' '}
           <span className="text-rose-600">PKR {grandTotal}</span>
         </div>
       </div>
@@ -146,7 +146,7 @@ const OrderDetailPage = () => {
         </button>
         <button
           className="bg-gray-300 py-2 px-4 rounded hover:bg-gray-400"
-          onClick={() => alert("Order cancelled (demo)")}
+          onClick={() => alert('Order cancelled (demo)')}
         >
           Cancel Order
         </button>

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 
 const EditProductPage = () => {
   const { productId } = useParams();
@@ -7,12 +7,12 @@ const EditProductPage = () => {
   const [product, setProduct] = useState(null);
 
   useEffect(() => {
-    fetch(`http://localhost/products.php`)
+    fetch(`http://localhost/api/products.php`)
       .then((res) => res.json())
       .then((data) => {
         const found = data.find((p) => String(p.id) === productId);
         if (found) setProduct(found);
-        else alert("Product not found");
+        else alert('Product not found');
       })
       .catch(console.error);
   }, [productId]);
@@ -29,18 +29,18 @@ const EditProductPage = () => {
       const response = await fetch(
         `http://localhost/api/products.php?id=${productId}`,
         {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(product),
         }
       );
-      if (!response.ok) throw new Error("Failed to update");
+      if (!response.ok) throw new Error('Failed to update');
 
-      alert("Product updated successfully!");
-      navigate("/admin/products");
+      alert('Product updated successfully!');
+      navigate('/admin/products');
     } catch (err) {
       console.error(err);
-      alert("Error updating product");
+      alert('Error updating product');
     }
   };
 
