@@ -7,14 +7,14 @@ const EditProductPage = () => {
   const [product, setProduct] = useState(null);
 
   useEffect(() => {
-    // Fetch product details
-    fetch(`http://localhost:5000/products/${productId}`)
+    fetch(`http://localhost/products.php`)
       .then((res) => res.json())
-      .then((data) => setProduct(data))
-      .catch((err) => {
-        console.error(err);
-        alert("Failed to load product");
-      });
+      .then((data) => {
+        const found = data.find((p) => String(p.id) === productId);
+        if (found) setProduct(found);
+        else alert("Product not found");
+      })
+      .catch(console.error);
   }, [productId]);
 
   const handleChange = (e) =>
@@ -25,22 +25,21 @@ const EditProductPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
-      const response = await fetch(`http://localhost:5000/products/${productId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(product),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to update product");
-      }
+      const response = await fetch(
+        `http://localhost/api/products.php?id=${productId}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(product),
+        }
+      );
+      if (!response.ok) throw new Error("Failed to update");
 
       alert("Product updated successfully!");
       navigate("/admin/products");
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      console.error(err);
       alert("Error updating product");
     }
   };

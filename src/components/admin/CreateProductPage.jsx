@@ -35,53 +35,18 @@ const CreateProductPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
-      const response = await fetch("http://localhost:5000/products", {
+      const response = await fetch("http://localhost/api/products.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(product),
       });
+      if (!response.ok) throw new Error("Failed to create");
 
-      if (!response.ok) {
-        throw new Error("Failed to create product");
-      }
-
-      const data = await response.json();
-      console.log("Product created:", data);
       alert("Product created successfully!");
-
-      // Reset form
-      setProduct({
-        title: "",
-        description: "",
-        sku: "",
-        brand: "",
-        category: "",
-        subCategory: "",
-        tags: "",
-        originalPrice: "",
-        discountPrice: "",
-        currency: "PKR",
-        stock: "",
-        weight: "",
-        mainImage: "",
-        galleryImages: "",
-        colors: "",
-        sizes: "",
-        fabric: "",
-        season: "",
-        shippingClass: "",
-        shippingCharges: "",
-        status: "active",
-        visibility: "public",
-        featured: false,
-        metaTitle: "",
-        metaDescription: "",
-        metaKeywords: "",
-      });
-    } catch (error) {
-      console.error(error);
+      navigate("/admin/products");
+    } catch (err) {
+      console.error(err);
       alert("Error creating product");
     }
   };

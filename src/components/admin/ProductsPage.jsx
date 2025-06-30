@@ -5,7 +5,7 @@ const ProductsPage = () => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/products")
+    fetch("http://localhost/api/products.php")
       .then((res) => res.json())
       .then((data) => setProducts(data))
       .catch((err) => console.error(err));
@@ -15,7 +15,7 @@ const ProductsPage = () => {
     if (window.confirm("Are you sure you want to delete this product?")) {
       try {
         const response = await fetch(
-          `http://localhost:5000/products/${productId}`,
+          `http://localhost/api/products.php?id=${productId}`,
           {
             method: "DELETE",
           }
