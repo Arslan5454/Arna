@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const CreateProductPage = () => {
+  const navigate = useNavigate()
   const [product, setProduct] = useState({
     title: "",
     description: "",
@@ -29,6 +31,24 @@ const CreateProductPage = () => {
     metaDescription: "",
     metaKeywords: "",
   });
+  const handleTitleBlur = async () => {
+  if (!product.title.trim()) return;
+
+  try {
+    const response = await fetch("http://localhost/api/generate-description.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ title: product.title }),
+    });
+    if (!response.ok) throw new Error("Failed to generate description");
+
+    const data = await response.json();
+    setProduct((prev) => ({ ...prev, description: data.description }));
+  } catch (err) {
+    console.error(err);
+    alert("AI description generate karne me error");
+  }
+};
 
   const handleChange = (e) =>
     setProduct({ ...product, [e.target.name]: e.target.value });
@@ -60,6 +80,7 @@ const CreateProductPage = () => {
           name="title"
           value={product.title}
           onChange={handleChange}
+          onBlur={handleTitleBlur}
           placeholder="Product Title"
           className="w-full border p-3 rounded"
           required
