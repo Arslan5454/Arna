@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-
+import { Link, NavLink } from "react-router-dom";
+import { Eye, Trash2 } from "lucide-react";
 const OrdersPage = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -58,7 +58,7 @@ const OrdersPage = () => {
         <table className="min-w-full border text-left text-sm">
           <thead>
             <tr className="bg-gray-100 text-xs text-gray-700 uppercase">
-              <th className="p-3 border">ID</th>
+              <th className="p-3 border">#</th>
               <th className="p-3 border">Customer</th>
               <th className="p-3 border">Amount</th>
               <th className="p-3 border">Status</th>
@@ -68,9 +68,10 @@ const OrdersPage = () => {
             </tr>
           </thead>
           <tbody>
-            {orders.map((order) => (
+            {orders.map((order, index) => (
               <tr key={order.id} className="hover:bg-gray-50">
-                <td className="p-3 border">{order.id}</td>
+                <td className="p-3 border">{index + 1}</td>
+                {/* <td className="px-4 py-2 border">{index + 1}</td> */}
                 <td className="p-3 border">{order.customer_name}</td>
                 <td className="p-3 border">PKR {order.total_amount}</td>
                 <td className="p-3 border capitalize">{order.status}</td>
@@ -82,17 +83,19 @@ const OrdersPage = () => {
                 </td>
                 <td className="p-3 border">
                   <div className="flex gap-2">
-                    <Link
+                    <NavLink
                       to={`/admin/orders/${order.id}`}
-                      className="text-blue-600 hover:underline"
+                      className="text-blue-600 flex items-center gap-1 hover:underline cursor-pointer"
                     >
-                      View
-                    </Link>
+                      <Eye size={18} />{" "}
+                      <span className="hidden sm:inline">View</span>
+                    </NavLink>
                     <button
-                      className="text-red-600 hover:underline"
+                      className="text-red-600 flex items-center gap-1 hover:underline cursor-pointer"
                       onClick={() => handleDelete(order.id)}
                     >
-                      Delete
+                      <Trash2 size={18} />{" "}
+                      <span className="hidden sm:inline">Delete</span>
                     </button>
                   </div>
                 </td>

@@ -4,54 +4,50 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
-import model1 from "../../assets/models/1.png"; // your model images
+import model1 from "../../assets/models/1.png";
 import model2 from "../../assets/models/2.png";
 import model3 from "../../assets/models/3.png";
 
 const slides = [
-  { leftImg: model1, rightImg: model2, caption: "Ready to wear" },
+  { leftImg: model1, rightImg: model2, caption: "Ready to Wear" },
   { leftImg: model2, rightImg: model3, caption: "Elegant & Effortless" },
   { leftImg: model3, rightImg: model1, caption: "Discover Your Look" },
 ];
+
 const HeroCarousel = () => {
   return (
     <Swiper
       modules={[Navigation, Pagination, Autoplay]}
-      navigation={{
-        nextEl: null,
-        prevEl: null,
-      }}
       pagination={{ clickable: true }}
-      loop={true}
-      autoplay={{ delay: 5000 }}
-      className="w-full"
+      loop
+      autoplay={{ delay: 4000 }}
+      className="w-full h-[50vh]"
     >
       {slides.map((slide, index) => (
         <SwiperSlide key={index}>
-          <div className="flex flex-row items-center justify-center gap-2 sm:gap-4 px-2 sm:px-8 py-6 bg-gradient-to-r from-gray-50 via-gray-50 to-gray-100">
+          <div className="relative w-full h-full flex items-center justify-center overflow-hidden bg-gradient-to-r from-gray-900 via-gray-800 to-gray-700">
             {/* Left Image */}
-            <div className="w-1/2 max-w-[180px] sm:max-w-[220px]">
-              <img
-                src={slide.leftImg}
-                alt="Left model"
-                className="w-full h-[260px] sm:h-[360px] object-cover rounded-xl shadow-sm"
-              />
-            </div>
-
-            {/* Center Caption */}
-            <div className="flex-1 text-center px-1 sm:px-4">
-              <h2 className="text-lg sm:text-3xl font-playfair font-semibold text-gray-700 leading-tight">
-                {slide.caption}
-              </h2>
-            </div>
+            <img
+              src={slide.leftImg}
+              alt="Left model"
+              className="absolute left-2 md:left-16 bottom-0 w-1/3 md:w-1/4 h-auto object-cover rounded-xl shadow-xl z-20 animate-fade-in"
+            />
 
             {/* Right Image */}
-            <div className="w-1/2 max-w-[180px] sm:max-w-[220px]">
-              <img
-                src={slide.rightImg}
-                alt="Right model"
-                className="w-full h-[260px] sm:h-[360px] object-cover rounded-xl shadow-sm"
-              />
+            <img
+              src={slide.rightImg}
+              alt="Right model"
+              className="absolute right-2 md:right-16 bottom-0 w-1/3 md:w-1/4 h-auto object-cover rounded-xl shadow-xl z-20 animate-fade-in"
+            />
+
+            {/* Center Caption */}
+            <div className="relative z-30 text-center px-4 md:px-8">
+              <h2 className="text-2xl sm:text-4xl md:text-5xl font-playfair font-bold text-white leading-tight drop-shadow-sm animate-slide-up">
+                {slide.caption}
+              </h2>
+              <button className="mt-4 bg-rose-500 text-white py-3 px-8 rounded-full text-sm md:text-base font-semibold hover:bg-rose-600 transition shadow animate-fade-in">
+                Shop Now
+              </button>
             </div>
           </div>
         </SwiperSlide>
@@ -59,4 +55,5 @@ const HeroCarousel = () => {
     </Swiper>
   );
 };
+
 export default HeroCarousel;

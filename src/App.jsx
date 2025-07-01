@@ -29,6 +29,7 @@ import CustomersPage from "./components/admin/CustomersPage";
 import AdminCategoriesPage from "./components/admin/AdminCategoriesPage";
 import TrackOrderPage from "./components/pages/TrackOrderPage";
 import OrderConfirmationPage from "./components/pages/OrderConfirmationPage";
+import TrackerOrderCustomer from "./components/layout/TrackerOrderCustomer";
 // import ProductDetail from './components/pages/WomensClothes/ProductDetail'
 
 function App() {
@@ -56,6 +57,7 @@ function App() {
           path: "/order-confirmation/:orderId",
           element: <OrderConfirmationPage />,
         },
+        { path: "/trackordercustomer", element: <TrackerOrderCustomer /> },
       ],
     },
     {

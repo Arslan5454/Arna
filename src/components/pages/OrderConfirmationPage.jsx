@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { CheckCircle } from "lucide-react";
+import { CheckCircle, ReceiptText, MapPin, Truck } from "lucide-react";
 
 const OrderConfirmationPage = () => {
   const { orderId } = useParams();
@@ -47,7 +47,11 @@ const OrderConfirmationPage = () => {
       </div>
 
       <div className="mb-8 border-t pt-4">
-        <h3 className="text-lg font-bold mb-2 text-gray-800">Order Summary</h3>
+        <h3 className="text-lg font-bold mb-2 text-gray-800">
+          {" "}
+          <ReceiptText className="text-rose-600" size={18} />
+          Order Summary
+        </h3>
         {order && order.total_amount !== undefined ? (
           <div className="space-y-2 text-gray-700">
             <p>
@@ -72,6 +76,7 @@ const OrderConfirmationPage = () => {
 
       <div className="mb-8 border-t pt-4">
         <h3 className="text-lg font-bold mb-2 text-gray-800">
+          <MapPin className="text-rose-600" size={18} />
           Delivery Address
         </h3>
         <p className="border p-4 rounded bg-gray-50 mb-4">

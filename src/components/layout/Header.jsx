@@ -1,19 +1,5 @@
-import {
-  BadgeCheck,
-  Calendar,
-  CircleDot,
-  Heart,
-  LayoutGrid,
-  Menu,
-  PenLine,
-  Snowflake,
-  Sparkles,
-  Star,
-  Sun,
-  X,
-} from "lucide-react";
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import {
   Shirt,
   Flower,
@@ -23,13 +9,17 @@ import {
   Circle,
   ShoppingBag,
   ChevronDown,
+  Menu,
+  Snowflake,
+  Star,
+  X,
+  Search,
+  PackageSearch,
+  LogIn,
 } from "lucide-react";
 
 const Header = () => {
-  //Menu open State
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  // Mobile Menu with Expand/Collapse (+ Toggle)
   const [expandedMenus, setExpandedMenus] = useState({});
 
   const toggleMenu = (name) => {
@@ -38,7 +28,7 @@ const Header = () => {
       [name]: !prev[name],
     }));
   };
-  //Nav Menu items
+
   const navLinks = [
     {
       name: "MENS",
@@ -91,7 +81,6 @@ const Header = () => {
     { name: "CONTACT", to: "/contact", icon: <Phone size={18} /> },
   ];
 
-  // Active link style
   const getNavLinkClass = ({ isActive }) =>
     `text-lg font-semibold tracking-wide ${
       isActive
@@ -102,6 +91,7 @@ const Header = () => {
   return (
     <header className="sticky top-0 left-0 bg-white/90 backdrop-blur-md shadow-sm w-full z-50">
       <div className="max-w-7xl mx-auto flex justify-between items-center py-4 px-4 md:px-8">
+        {/* Logo */}
         <NavLink to={"/"}>
           <h1 className="text-2xl md:text-3xl font-playfair text-rose-600 font-bold">
             Arna Wearing
@@ -120,42 +110,36 @@ const Header = () => {
 
               {link.submenu && (
                 <div className="absolute top-full left-0 hidden group-hover:flex bg-white shadow-lg rounded-md p-6 space-x-8 z-50">
-                  {/* For MENS submenu */}
                   {link.name === "MENS" && (
-                    <>
-                      <ul className="space-y-2">
-                        {link.submenu.wear.map((item, i) => (
-                          <li key={i} className="flex items-center gap-2">
-                            {item.icon}
-                            <NavLink
-                              to={item.to}
-                              className="text-sm text-gray-700 hover:text-rose-600"
-                            >
-                              {item.name}
-                            </NavLink>
-                          </li>
-                        ))}
-                      </ul>
-                    </>
+                    <ul className="space-y-2">
+                      {link.submenu.wear.map((item, i) => (
+                        <li key={i} className="flex items-center gap-2">
+                          {item.icon}
+                          <NavLink
+                            to={item.to}
+                            className="text-sm text-gray-700 hover:text-rose-600"
+                          >
+                            {item.name}
+                          </NavLink>
+                        </li>
+                      ))}
+                    </ul>
                   )}
 
-                  {/* For WOMEN submenu */}
                   {link.name === "WOMEN" && (
-                    <>
-                      <ul className="space-y-2">
-                        {link.submenu.fabric.map((item, i) => (
-                          <li key={i} className="flex items-center gap-2">
-                            {item.icon}
-                            <NavLink
-                              to={item.to}
-                              className="text-sm text-gray-700 hover:text-rose-600"
-                            >
-                              {item.name}
-                            </NavLink>
-                          </li>
-                        ))}
-                      </ul>
-                    </>
+                    <ul className="space-y-2">
+                      {link.submenu.fabric.map((item, i) => (
+                        <li key={i} className="flex items-center gap-2">
+                          {item.icon}
+                          <NavLink
+                            to={item.to}
+                            className="text-sm text-gray-700 hover:text-rose-600"
+                          >
+                            {item.name}
+                          </NavLink>
+                        </li>
+                      ))}
+                    </ul>
                   )}
                 </div>
               )}
@@ -163,8 +147,42 @@ const Header = () => {
           ))}
         </ul>
 
+        {/* Right Side Icons */}
+        <div className="hidden md:flex items-center gap-4">
+          <Link
+            to="/trackordercustomer"
+            className="text-gray-700 hover:text-rose-600 transition"
+            title="Track Order"
+          >
+            <PackageSearch size={24} />
+          </Link>
+
+          <Link
+            to="/account"
+            className="text-gray-700 hover:text-rose-600 transition"
+            title="My Account"
+          >
+            <LogIn size={24} />
+          </Link>
+        </div>
+
         {/* Mobile Menu Icon */}
-        <div className="md:hidden">
+        <div className="md:hidden flex items-center gap-4">
+          <Link
+            to="/trackordercustomer"
+            className="text-gray-700 hover:text-rose-600 transition"
+            title="Track Order"
+          >
+            <PackageSearch size={24} />
+          </Link>
+          <Link
+            to="/account"
+            className="text-gray-700 hover:text-rose-600 transition"
+            title="My Account"
+          >
+            <LogIn size={24} />
+          </Link>
+
           {mobileMenuOpen ? (
             <X size={28} onClick={() => setMobileMenuOpen(false)} />
           ) : (
@@ -201,38 +219,31 @@ const Header = () => {
                 )}
               </div>
 
-              {/* Expanded Submenu Content */}
               {link.submenu && expandedMenus[link.name] && (
                 <div className="mt-3 ml-4 space-y-3">
-                  {link.name === "MENS" && (
-                    <>
-                      {link.submenu.wear.map((item, i) => (
-                        <NavLink
-                          key={i}
-                          to={item.to}
-                          onClick={() => setMobileMenuOpen(false)}
-                          className="flex items-center gap-2 text-sm text-gray-700 hover:text-rose-600"
-                        >
-                          {item.icon} {item.name}
-                        </NavLink>
-                      ))}
-                    </>
-                  )}
+                  {link.name === "MENS" &&
+                    link.submenu.wear.map((item, i) => (
+                      <NavLink
+                        key={i}
+                        to={item.to}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="flex items-center gap-2 text-sm text-gray-700 hover:text-rose-600"
+                      >
+                        {item.icon} {item.name}
+                      </NavLink>
+                    ))}
 
-                  {link.name === "WOMEN" && (
-                    <>
-                      {link.submenu.fabric.map((item, i) => (
-                        <NavLink
-                          key={i}
-                          to={item.to}
-                          onClick={() => setMobileMenuOpen(false)}
-                          className="flex items-center gap-2 text-sm text-gray-700 hover:text-rose-600"
-                        >
-                          {item.icon} {item.name}
-                        </NavLink>
-                      ))}
-                    </>
-                  )}
+                  {link.name === "WOMEN" &&
+                    link.submenu.fabric.map((item, i) => (
+                      <NavLink
+                        key={i}
+                        to={item.to}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="flex items-center gap-2 text-sm text-gray-700 hover:text-rose-600"
+                      >
+                        {item.icon} {item.name}
+                      </NavLink>
+                    ))}
                 </div>
               )}
             </li>

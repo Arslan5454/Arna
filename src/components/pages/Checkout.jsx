@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useCart } from "../../context/CartContext"; // ✅ global cart
 import { useNavigate } from "react-router-dom";
+import { ShoppingBag, ClipboardList, MapPin, CreditCard } from "lucide-react";
 
 const CheckoutPage = () => {
   const { cartItems, totalPrice } = useCart();
@@ -110,6 +111,7 @@ const CheckoutPage = () => {
       {/* LEFT: CHECKOUT FORM */}
       <div className="space-y-6 border p-6 rounded shadow">
         <h2 className="text-2xl font-bold text-gray-800 mb-4">
+          <ClipboardList className="text-rose-600" size={24} />
           Checkout Details
         </h2>
 
@@ -203,6 +205,7 @@ const CheckoutPage = () => {
 
           <div>
             <label className="block text-gray-700 font-medium mb-1">
+              <CreditCard size={16} className="text-rose-600" />
               Payment Method
             </label>
             <select
@@ -241,7 +244,10 @@ const CheckoutPage = () => {
 
       {/* RIGHT: ORDER SUMMARY */}
       <div className="border p-6 rounded shadow space-y-4 max-h-[80vh] overflow-y-auto">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">Order Summary</h2>
+        <h2 className="text-2xl font-bold text-gray-800 mb-4">
+          <ShoppingBag className="text-rose-600" size={24} />
+          Order Summary
+        </h2>
 
         {cartItems.length === 0 ? (
           <p className="text-gray-600">Your cart is empty.</p>
