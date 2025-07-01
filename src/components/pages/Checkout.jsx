@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { useCart } from "../../context/CartContext"; // ✅ global cart
+import { useNavigate } from "react-router-dom";
 
 const CheckoutPage = () => {
   const { cartItems, totalPrice } = useCart();
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -64,17 +66,19 @@ const CheckoutPage = () => {
         body: JSON.stringify(orderData),
       });
       const result = await res.json();
+
       if (res.ok) {
-        alert("Order placed successfully!");
-        console.log("Order ID:", result.order_id);
+        console.log("Order Response:", result);
+
+        // ✅ Navigate to confirmation page with order data
+        navigate("/order-confirmation", { state: { order: result } });
       } else {
-        alert("Error: " + result.error);
+        alert("Error placing order: " + result.error);
       }
     } catch (err) {
-      console.log(err);
-      alert("Failed to place order");
+      console.error("Order placement failed:", err);
+      alert("Failed to place order. Please try again.");
     }
-    console.log("Sending order:", orderData);
   };
 
   const calculateDiscount = () => {

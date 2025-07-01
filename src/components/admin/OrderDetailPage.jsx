@@ -207,6 +207,54 @@ const OrderDetailPage = () => {
             <p className="text-gray-600">Date: {order.created_at || "N/A"}</p>
           </div>
         </div>
+        {/* Order Timeline */}
+        {/* Horizontal Order Timeline */}
+        <div className="mb-6 border-t pt-4 print:hidden">
+          <h3 className="text-lg font-bold mb-4">Order Timeline</h3>
+          <div className="flex justify-between items-center overflow-x-auto">
+            {[
+              { label: "Pending", value: "pending" },
+              { label: "Processing", value: "processing" },
+              { label: "Shipped", value: "shipped" },
+              { label: "Delivered", value: "delivered" },
+              { label: "Cancelled", value: "cancelled" },
+            ].map((step, idx) => (
+              <div
+                key={idx}
+                className="flex flex-col items-center relative flex-shrink-0 w-24"
+              >
+                <div
+                  className={`w-8 h-8 rounded-full border-2 flex items-center justify-center mb-2 ${
+                    order.status === step.value
+                      ? "bg-rose-600 border-rose-600 text-white"
+                      : "bg-gray-200 border-gray-400 text-gray-700"
+                  }`}
+                >
+                  {idx + 1}
+                </div>
+                <span
+                  className={`text-xs font-semibold text-center ${
+                    order.status === step.value
+                      ? "text-rose-600"
+                      : "text-gray-600"
+                  }`}
+                >
+                  {step.label}
+                </span>
+                {/* Connector line */}
+                {idx < 4 && (
+                  <div
+                    className={`absolute top-4 left-12 w-16 h-1 ${
+                      order.status === step.value
+                        ? "bg-rose-600"
+                        : "bg-gray-300"
+                    }`}
+                  ></div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
 
         <div className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>

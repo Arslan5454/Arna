@@ -27,6 +27,8 @@ import { ProductProvider } from "./context/ProductContext";
 import OrderDetailPage from "./components/admin/OrderDetailPage";
 import CustomersPage from "./components/admin/CustomersPage";
 import AdminCategoriesPage from "./components/admin/AdminCategoriesPage";
+import TrackOrderPage from "./components/pages/TrackOrderPage";
+import OrderConfirmationPage from "./components/pages/OrderConfirmationPage";
 // import ProductDetail from './components/pages/WomensClothes/ProductDetail'
 
 function App() {
@@ -49,6 +51,8 @@ function App() {
         { path: "/featured", element: <FeaturedCloth /> },
         { path: "/lawn", element: <LawnCloth /> },
         { path: "/checkout", element: <Checkout /> },
+        { path: "/track-order/:trackingNumber", element: <TrackOrderPage /> },
+        { path: "/order-confirmation", element: <OrderConfirmationPage /> },
       ],
     },
     {
