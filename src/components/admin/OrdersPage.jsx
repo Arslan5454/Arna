@@ -23,6 +23,26 @@ const OrdersPage = () => {
 
     fetchOrders();
   }, []);
+  //Delete Method
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this order?")) return;
+
+    try {
+      const res = await fetch(`http://localhost/api/orders.php?id=${id}`, {
+        method: "DELETE",
+      });
+      const result = await res.json();
+      if (res.ok) {
+        alert("Order deleted successfully!");
+        setOrders((prev) => prev.filter((order) => order.id !== id));
+      } else {
+        alert("Failed to delete: " + result.error);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong");
+    }
+  };
 
   return (
     <div className="p-6">
@@ -70,7 +90,7 @@ const OrdersPage = () => {
                     </Link>
                     <button
                       className="text-red-600 hover:underline"
-                      onClick={() => alert(`Delete order ID ${order.id}`)}
+                      onClick={() => handleDelete(order.id)}
                     >
                       Delete
                     </button>
