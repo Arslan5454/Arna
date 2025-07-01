@@ -52,7 +52,10 @@ function App() {
         { path: "/lawn", element: <LawnCloth /> },
         { path: "/checkout", element: <Checkout /> },
         { path: "/track-order/:trackingNumber", element: <TrackOrderPage /> },
-        { path: "/order-confirmation", element: <OrderConfirmationPage /> },
+        {
+          path: "/order-confirmation/:orderId",
+          element: <OrderConfirmationPage />,
+        },
       ],
     },
     {

@@ -1,12 +1,31 @@
-import React from "react";
-import { useLocation, Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useParams, Link } from "react-router-dom";
 import { CheckCircle } from "lucide-react";
 
 const OrderConfirmationPage = () => {
-  const location = useLocation();
-  const order = location.state?.order; // Pass order data via state from checkout
+  const { orderId } = useParams();
+  const [order, setOrder] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  if (!order) return <p className="p-6 text-red-600">Order details missing.</p>;
+  useEffect(() => {
+    const fetchOrder = async () => {
+      try {
+        const res = await fetch(
+          `http://localhost/api/orders.php?id=${orderId}`
+        );
+        const data = await res.json();
+        setOrder(data);
+      } catch (err) {
+        console.error("Failed to fetch order", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchOrder();
+  }, [orderId]);
+
+  if (loading) return <p className="p-6">Loading order details...</p>;
+  if (!order) return <p className="p-6 text-red-600">Order not found.</p>;
 
   return (
     <div className="p-6 max-w-3xl mx-auto bg-white rounded shadow animate-fade-in">
@@ -29,22 +48,26 @@ const OrderConfirmationPage = () => {
 
       <div className="mb-8 border-t pt-4">
         <h3 className="text-lg font-bold mb-2 text-gray-800">Order Summary</h3>
-        <div className="space-y-2 text-gray-700">
-          <p>
-            <strong>Total Amount:</strong>{" "}
-            <span className="text-rose-600 font-bold">
-              PKR {order.total_amount}
-            </span>
-          </p>
-          <p>
-            <strong>Payment Status:</strong>{" "}
-            <span className="capitalize">{order.payment_status}</span>
-          </p>
-          <p>
-            <strong>Order Status:</strong>{" "}
-            <span className="capitalize">{order.status}</span>
-          </p>
-        </div>
+        {order && order.total_amount !== undefined ? (
+          <div className="space-y-2 text-gray-700">
+            <p>
+              <strong>Total Amount:</strong>{" "}
+              <span className="text-rose-600 font-bold">
+                PKR {order.total_amount}
+              </span>
+            </p>
+            <p>
+              <strong>Payment Status:</strong>{" "}
+              <span className="capitalize">{order.payment_status}</span>
+            </p>
+            <p>
+              <strong>Order Status:</strong>{" "}
+              <span className="capitalize">{order.status}</span>
+            </p>
+          </div>
+        ) : (
+          <p className="text-red-600">Order details not available.</p>
+        )}
       </div>
 
       <div className="mb-8 border-t pt-4">

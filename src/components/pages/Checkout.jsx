@@ -71,7 +71,7 @@ const CheckoutPage = () => {
         console.log("Order Response:", result);
 
         // ✅ Navigate to confirmation page with order data
-        navigate("/order-confirmation", { state: { order: result } });
+        navigate(`/order-confirmation/${result.order_id}`);
       } else {
         alert("Error placing order: " + result.error);
       }
