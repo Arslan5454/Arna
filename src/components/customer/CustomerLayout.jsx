@@ -9,7 +9,7 @@ const CustomerLayout = () => {
           <Link to="/customer" className="block hover:text-rose-400">
             Dashboard
           </Link>
-          <Link to="/customer/orders" className="block hover:text-rose-400">
+          <Link to="/customer/myorders" className="block hover:text-rose-400">
             My Orders
           </Link>
           <Link to="/customer/profile" className="block hover:text-rose-400">

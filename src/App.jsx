@@ -34,6 +34,7 @@ import AuthPage from "./components/pages/Auth";
 import { ProtectedRoute } from "./components/protected/ProtectedRoute";
 import CustomerLayout from "./components/customer/CustomerLayout";
 import CustomerDashboard from "./components/customer/CustomerDashboard";
+import MyOrders from "./components/customer/MyOrder";
 // import ProductDetail from './components/pages/WomensClothes/ProductDetail'
 
 function App() {
@@ -93,6 +94,7 @@ function App() {
       ),
       children: [
         { path: "", element: <CustomerDashboard /> },
+        { path: "myorders", element: <MyOrders /> },
         // More customer routes e.g. orders, profile, addresses
       ],
     },
