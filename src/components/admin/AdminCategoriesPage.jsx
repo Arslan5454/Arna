@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { Plus, Edit2, Trash2, Folder } from "lucide-react";
 
 const AdminCategoriesPage = () => {
   const [categories, setCategories] = useState([]);
@@ -12,7 +14,9 @@ const AdminCategoriesPage = () => {
     setCategories(data);
   };
 
-  useEffect(() => { fetchCategories(); }, []);
+  useEffect(() => {
+    fetchCategories();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,13 +30,13 @@ const AdminCategoriesPage = () => {
       body: JSON.stringify({ name, parent_id: parentId || null }),
     });
     if (res.ok) {
-      alert(editingId ? "Updated!" : "Created!");
+      alert(editingId ? "Category updated!" : "Category created!");
       setName("");
       setParentId("");
       setEditingId(null);
       fetchCategories();
     } else {
-      alert("Failed!");
+      alert("Operation failed!");
     }
   };
 
@@ -43,74 +47,117 @@ const AdminCategoriesPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Delete this category?")) return;
-    const res = await fetch(`http://localhost/api/categories.php?id=${id}`, { method: "DELETE" });
+    if (!window.confirm("Are you sure to delete this category?")) return;
+    const res = await fetch(`http://localhost/api/categories.php?id=${id}`, {
+      method: "DELETE",
+    });
     if (res.ok) fetchCategories();
   };
 
   return (
-    <div className="p-6 max-w-3xl mx-auto">
-      <h2 className="text-2xl font-bold mb-6">Manage Categories</h2>
+    <motion.div
+      className="p-8 max-w-4xl mx-auto bg-white rounded-3xl shadow-2xl"
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+    >
+      <motion.h2
+        className="text-3xl font-bold mb-8 text-rose-600 flex items-center gap-2"
+        initial={{ x: -20, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+      >
+        <Folder size={28} /> Manage Categories
+      </motion.h2>
 
-      <form onSubmit={handleSubmit} className="space-y-4 mb-8">
-        <input
-          className="w-full border p-3 rounded"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Category Name"
-          required
-        />
-        <select
-          className="w-full border p-3 rounded"
-          value={parentId}
-          onChange={(e) => setParentId(e.target.value)}
+      <motion.form
+        onSubmit={handleSubmit}
+        className="bg-gray-50 p-6 rounded-xl shadow mb-10 space-y-4"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+      >
+        <div className="flex flex-col md:flex-row gap-4">
+          <input
+            className="flex-1 border border-gray-300 p-3 rounded focus:outline-none focus:border-rose-500 transition"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Category Name"
+            required
+          />
+          <select
+            className="flex-1 border border-gray-300 p-3 rounded focus:outline-none focus:border-rose-500 transition"
+            value={parentId}
+            onChange={(e) => setParentId(e.target.value)}
+          >
+            <option value="">No Parent (Main Category)</option>
+            {categories.map((cat) => (
+              <option key={cat.id} value={cat.id}>
+                {cat.parent_name
+                  ? `${cat.parent_name} > ${cat.name}`
+                  : cat.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <motion.button
+          whileTap={{ scale: 0.95 }}
+          className="flex items-center justify-center gap-2 w-full md:w-fit bg-rose-600 text-white py-3 px-6 rounded-full hover:bg-rose-700 transition"
+          type="submit"
         >
-          <option value="">No Parent (Main Category)</option>
-          {categories.map((cat) => (
-            <option key={cat.id} value={cat.id}>
-              {cat.parent_name ? `${cat.parent_name} > ${cat.name}` : cat.name}
-            </option>
-          ))}
-        </select>
-        <button className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">
-          {editingId ? "Update" : "Add Category"}
-        </button>
-      </form>
+          <Plus size={20} /> {editingId ? "Update Category" : "Add Category"}
+        </motion.button>
+      </motion.form>
 
-      <table className="w-full border">
-        <thead>
-          <tr className="bg-gray-100">
-            <th className="border p-2 text-left">ID</th>
-            <th className="border p-2 text-left">Category</th>
-            <th className="border p-2 text-left">Parent</th>
-            <th className="border p-2">Actions</th>
+      <motion.table
+        className="w-full border rounded-xl overflow-hidden shadow text-sm"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+      >
+        <thead className="bg-gray-100 text-gray-700 text-left">
+          <tr>
+            <th className="p-3">ID</th>
+            <th className="p-3">Category</th>
+            <th className="p-3">Parent</th>
+            <th className="p-3 text-center">Actions</th>
           </tr>
         </thead>
         <tbody>
-          {categories.map((cat) => (
-            <tr key={cat.id}>
-              <td className="border p-2">{cat.id}</td>
-              <td className="border p-2">{cat.name}</td>
-              <td className="border p-2">{cat.parent_name || "-"}</td>
-              <td className="border p-2 text-center space-x-2">
-                <button
-                  className="bg-yellow-500 text-white px-2 py-1 rounded"
-                  onClick={() => handleEdit(cat)}
-                >
-                  Edit
-                </button>
-                <button
-                  className="bg-red-600 text-white px-2 py-1 rounded"
-                  onClick={() => handleDelete(cat.id)}
-                >
-                  Delete
-                </button>
+          {categories.length > 0 ? (
+            categories.map((cat, idx) => (
+              <motion.tr
+                key={cat.id}
+                className="border-t hover:bg-gray-50 transition"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: idx * 0.05 }}
+              >
+                <td className="p-3 font-semibold text-gray-700">{cat.id}</td>
+                <td className="p-3 text-gray-600">{cat.name}</td>
+                <td className="p-3 text-gray-500">{cat.parent_name || "-"}</td>
+                <td className="p-3 text-center space-x-2">
+                  <button
+                    className="inline-flex items-center gap-1 bg-yellow-500 text-white py-1.5 px-3 rounded hover:bg-yellow-600 transition"
+                    onClick={() => handleEdit(cat)}
+                  >
+                    <Edit2 size={16} /> Edit
+                  </button>
+                  <button
+                    className="inline-flex items-center gap-1 bg-red-600 text-white py-1.5 px-3 rounded hover:bg-red-700 transition"
+                    onClick={() => handleDelete(cat.id)}
+                  >
+                    <Trash2 size={16} /> Delete
+                  </button>
+                </td>
+              </motion.tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="4" className="p-6 text-center text-gray-500">
+                No categories found.
               </td>
             </tr>
-          ))}
+          )}
         </tbody>
-      </table>
-    </div>
+      </motion.table>
+    </motion.div>
   );
 };
 

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { PlusCircle } from "lucide-react";
 
 const CreateProductPage = () => {
   const navigate = useNavigate();
@@ -32,7 +34,6 @@ const CreateProductPage = () => {
     metaKeywords: "",
   });
 
-  //Categories Fetch
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
@@ -66,238 +67,262 @@ const CreateProductPage = () => {
   };
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-      <h2 className="text-2xl font-bold mb-6">Add New Product</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {/* BASIC DETAILS */}
-        <input
-          name="title"
-          value={product.title}
-          onChange={handleChange}
-          placeholder="Product Title"
-          className="w-full border p-3 rounded"
-          required
-        />
+    <motion.div
+      className="p-8 max-w-5xl mx-auto bg-white rounded-3xl shadow-2xl"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+    >
+      <motion.div
+        className="flex items-center gap-3 mb-8"
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+      >
+        <PlusCircle size={28} className="text-rose-600" />
+        <h2 className="text-3xl font-bold text-rose-600">Add New Product</h2>
+      </motion.div>
+
+      <form onSubmit={handleSubmit} className="space-y-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <input
+            name="title"
+            value={product.title}
+            onChange={handleChange}
+            placeholder="Product Title"
+            className="border p-3 rounded w-full"
+            required
+          />
+
+          <input
+            name="sku"
+            value={product.sku}
+            onChange={handleChange}
+            placeholder="SKU"
+            className="border p-3 rounded w-full"
+          />
+
+          <input
+            name="brand"
+            value={product.brand}
+            onChange={handleChange}
+            placeholder="Brand"
+            className="border p-3 rounded w-full"
+          />
+
+          <select
+            name="category"
+            value={product.category}
+            onChange={handleChange}
+            className="border p-3 rounded w-full"
+            required
+          >
+            <option value="">Select Category</option>
+            {categories.map((cat) => (
+              <option key={cat.id} value={cat.id}>
+                {cat.parent_name
+                  ? `${cat.parent_name} > ${cat.name}`
+                  : cat.name}
+              </option>
+            ))}
+          </select>
+
+          <input
+            name="tags"
+            value={product.tags}
+            onChange={handleChange}
+            placeholder="Tags (comma separated)"
+            className="border p-3 rounded w-full"
+          />
+
+          <input
+            name="originalPrice"
+            value={product.originalPrice}
+            onChange={handleChange}
+            placeholder="Original Price"
+            type="number"
+            className="border p-3 rounded w-full"
+            required
+          />
+
+          <input
+            name="discountPrice"
+            value={product.discountPrice}
+            onChange={handleChange}
+            placeholder="Discount Price"
+            type="number"
+            className="border p-3 rounded w-full"
+          />
+
+          <input
+            name="currency"
+            value={product.currency}
+            onChange={handleChange}
+            placeholder="Currency"
+            className="border p-3 rounded w-full"
+          />
+
+          <input
+            name="stock"
+            value={product.stock}
+            onChange={handleChange}
+            placeholder="Stock Quantity"
+            type="number"
+            className="border p-3 rounded w-full"
+            required
+          />
+
+          <input
+            name="weight"
+            value={product.weight}
+            onChange={handleChange}
+            placeholder="Weight (kg)"
+            type="number"
+            step="0.01"
+            className="border p-3 rounded w-full"
+          />
+
+          <input
+            name="mainImage"
+            value={product.mainImage}
+            onChange={handleChange}
+            placeholder="Main Image URL"
+            className="border p-3 rounded w-full"
+          />
+
+          <input
+            name="galleryImages"
+            value={product.galleryImages}
+            onChange={handleChange}
+            placeholder="Gallery Images URLs (comma separated)"
+            className="border p-3 rounded w-full"
+          />
+
+          <input
+            name="colors"
+            value={product.colors}
+            onChange={handleChange}
+            placeholder="Colors (comma separated)"
+            className="border p-3 rounded w-full"
+          />
+
+          <input
+            name="sizes"
+            value={product.sizes}
+            onChange={handleChange}
+            placeholder="Sizes (comma separated)"
+            className="border p-3 rounded w-full"
+          />
+
+          <input
+            name="fabric"
+            value={product.fabric}
+            onChange={handleChange}
+            placeholder="Fabric Type"
+            className="border p-3 rounded w-full"
+          />
+
+          <input
+            name="season"
+            value={product.season}
+            onChange={handleChange}
+            placeholder="Season"
+            className="border p-3 rounded w-full"
+          />
+
+          <input
+            name="shippingClass"
+            value={product.shippingClass}
+            onChange={handleChange}
+            placeholder="Shipping Class"
+            className="border p-3 rounded w-full"
+          />
+
+          <input
+            name="shippingCharges"
+            value={product.shippingCharges}
+            onChange={handleChange}
+            placeholder="Shipping Charges"
+            type="number"
+            className="border p-3 rounded w-full"
+          />
+
+          <select
+            name="status"
+            value={product.status}
+            onChange={handleChange}
+            className="border p-3 rounded w-full"
+          >
+            <option value="active">Active</option>
+            <option value="draft">Draft</option>
+            <option value="inactive">Inactive</option>
+          </select>
+
+          <select
+            name="visibility"
+            value={product.visibility}
+            onChange={handleChange}
+            className="border p-3 rounded w-full"
+          >
+            <option value="public">Public</option>
+            <option value="private">Private</option>
+          </select>
+
+          <div className="flex items-center gap-3 col-span-2">
+            <input
+              type="checkbox"
+              name="featured"
+              checked={product.featured}
+              onChange={(e) =>
+                setProduct({ ...product, featured: e.target.checked })
+              }
+            />
+            <label>Mark as Featured</label>
+          </div>
+        </div>
 
         <textarea
           name="description"
           value={product.description}
           onChange={handleChange}
           placeholder="Description"
-          className="w-full border p-3 rounded"
-          required
+          className="border p-3 rounded w-full"
           rows={4}
-        />
-        <input
-          name="sku"
-          value={product.sku}
-          onChange={handleChange}
-          placeholder="SKU"
-          className="w-full border p-3 rounded"
-        />
-        <input
-          name="brand"
-          value={product.brand}
-          onChange={handleChange}
-          placeholder="Brand"
-          className="w-full border p-3 rounded"
-        />
-        <select
-          name="category"
-          value={product.category}
-          onChange={handleChange}
-          className="w-full border p-3 rounded"
-          required
-        >
-          <option value="">Select Category</option>
-          {categories.map((cat) => (
-            <option key={cat.id} value={cat.id}>
-              {cat.parent_name ? `${cat.parent_name} > ${cat.name}` : cat.name}
-            </option>
-          ))}
-        </select>
-
-        <input
-          name="tags"
-          value={product.tags}
-          onChange={handleChange}
-          placeholder="Tags (comma separated)"
-          className="w-full border p-3 rounded"
-        />
-
-        {/* PRICING */}
-        <input
-          name="originalPrice"
-          value={product.originalPrice}
-          onChange={handleChange}
-          placeholder="Original Price"
-          type="number"
-          className="w-full border p-3 rounded"
           required
         />
-        <input
-          name="discountPrice"
-          value={product.discountPrice}
-          onChange={handleChange}
-          placeholder="Discount Price"
-          type="number"
-          className="w-full border p-3 rounded"
-        />
-        <input
-          name="currency"
-          value={product.currency}
-          onChange={handleChange}
-          placeholder="Currency"
-          className="w-full border p-3 rounded"
-        />
-        <input
-          name="stock"
-          value={product.stock}
-          onChange={handleChange}
-          placeholder="Stock Quantity"
-          type="number"
-          className="w-full border p-3 rounded"
-          required
-        />
-        <input
-          name="weight"
-          value={product.weight}
-          onChange={handleChange}
-          placeholder="Weight (kg)"
-          type="number"
-          step="0.01"
-          className="w-full border p-3 rounded"
-        />
 
-        {/* IMAGES */}
-        <input
-          name="mainImage"
-          value={product.mainImage}
-          onChange={handleChange}
-          placeholder="Main Image URL"
-          className="w-full border p-3 rounded"
-        />
-        <input
-          name="galleryImages"
-          value={product.galleryImages}
-          onChange={handleChange}
-          placeholder="Gallery Images URLs (comma separated)"
-          className="w-full border p-3 rounded"
-        />
-
-        {/* ATTRIBUTES */}
-        <input
-          name="colors"
-          value={product.colors}
-          onChange={handleChange}
-          placeholder="Colors (comma separated)"
-          className="w-full border p-3 rounded"
-        />
-        <input
-          name="sizes"
-          value={product.sizes}
-          onChange={handleChange}
-          placeholder="Sizes (comma separated)"
-          className="w-full border p-3 rounded"
-        />
-        <input
-          name="fabric"
-          value={product.fabric}
-          onChange={handleChange}
-          placeholder="Fabric Type"
-          className="w-full border p-3 rounded"
-        />
-        <input
-          name="season"
-          value={product.season}
-          onChange={handleChange}
-          placeholder="Season"
-          className="w-full border p-3 rounded"
-        />
-
-        {/* SHIPPING */}
-        <input
-          name="shippingClass"
-          value={product.shippingClass}
-          onChange={handleChange}
-          placeholder="Shipping Class"
-          className="w-full border p-3 rounded"
-        />
-        <input
-          name="shippingCharges"
-          value={product.shippingCharges}
-          onChange={handleChange}
-          placeholder="Shipping Charges"
-          type="number"
-          className="w-full border p-3 rounded"
-        />
-
-        {/* STATUS */}
-        <select
-          name="status"
-          value={product.status}
-          onChange={handleChange}
-          className="w-full border p-3 rounded"
-        >
-          <option value="active">Active</option>
-          <option value="draft">Draft</option>
-          <option value="inactive">Inactive</option>
-        </select>
-
-        <select
-          name="visibility"
-          value={product.visibility}
-          onChange={handleChange}
-          className="w-full border p-3 rounded"
-        >
-          <option value="public">Public</option>
-          <option value="private">Private</option>
-        </select>
-
-        <div className="flex items-center gap-2">
-          <input
-            type="checkbox"
-            name="featured"
-            checked={product.featured}
-            onChange={(e) =>
-              setProduct({ ...product, featured: e.target.checked })
-            }
-          />
-          <label>Mark as Featured</label>
-        </div>
-
-        {/* SEO */}
         <input
           name="metaTitle"
           value={product.metaTitle}
           onChange={handleChange}
           placeholder="Meta Title"
-          className="w-full border p-3 rounded"
+          className="border p-3 rounded w-full"
         />
+
         <textarea
           name="metaDescription"
           value={product.metaDescription}
           onChange={handleChange}
           placeholder="Meta Description"
-          className="w-full border p-3 rounded"
+          className="border p-3 rounded w-full"
           rows={2}
         />
+
         <input
           name="metaKeywords"
           value={product.metaKeywords}
           onChange={handleChange}
           placeholder="Meta Keywords"
-          className="w-full border p-3 rounded"
+          className="border p-3 rounded w-full"
         />
 
-        <button
+        <motion.button
           type="submit"
+          whileTap={{ scale: 0.95 }}
           className="bg-rose-600 text-white py-3 px-6 rounded hover:bg-rose-700 transition"
         >
           Add Product
-        </button>
+        </motion.button>
       </form>
-    </div>
+    </motion.div>
   );
 };
 
