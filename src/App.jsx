@@ -30,6 +30,10 @@ import AdminCategoriesPage from "./components/admin/AdminCategoriesPage";
 import TrackOrderPage from "./components/pages/TrackOrderPage";
 import OrderConfirmationPage from "./components/pages/OrderConfirmationPage";
 import TrackerOrderCustomer from "./components/layout/TrackerOrderCustomer";
+import AuthPage from "./components/pages/Auth";
+import { ProtectedRoute } from "./components/protected/ProtectedRoute";
+import CustomerLayout from "./components/customer/CustomerLayout";
+import CustomerDashboard from "./components/customer/CustomerDashboard";
 // import ProductDetail from './components/pages/WomensClothes/ProductDetail'
 
 function App() {
@@ -58,11 +62,16 @@ function App() {
           element: <OrderConfirmationPage />,
         },
         { path: "/trackordercustomer", element: <TrackerOrderCustomer /> },
+        { path: "/account", element: <AuthPage /> },
       ],
     },
     {
       path: "/admin",
-      element: <AdminLayout />,
+      element: (
+        <ProtectedRoute isAdmin={true}>
+          <AdminLayout />
+        </ProtectedRoute>
+      ),
       children: [
         { path: "", element: <DashboardHome /> },
         { path: "orders", element: <OrdersPage /> },
@@ -73,6 +82,18 @@ function App() {
         { path: "customers", element: <CustomersPage /> },
         { path: "categories", element: <AdminCategoriesPage /> },
         // more admin pages e.g. orders/products/customers will go here
+      ],
+    },
+    {
+      path: "/customer",
+      element: (
+        <ProtectedRoute>
+          <CustomerLayout />
+        </ProtectedRoute>
+      ),
+      children: [
+        { path: "", element: <CustomerDashboard /> },
+        // More customer routes e.g. orders, profile, addresses
       ],
     },
   ]);
