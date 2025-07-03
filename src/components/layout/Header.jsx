@@ -110,11 +110,24 @@ const Header = () => {
               >
                 {cat.name}
               </NavLink>
-
               {cat.subcategories?.length > 0 &&
                 renderDesktopSubcategories(cat.subcategories)}
             </div>
           ))}
+
+          {/* Additional static pages */}
+          <NavLink
+            to="/about"
+            className="text-lg font-semibold tracking-wide text-gray-700 hover:text-rose-600"
+          >
+            About
+          </NavLink>
+          <NavLink
+            to="/contact"
+            className="text-lg font-semibold tracking-wide text-gray-700 hover:text-rose-600"
+          >
+            Contact Us
+          </NavLink>
         </ul>
 
         {/* Right Side Icons */}
@@ -189,6 +202,22 @@ const Header = () => {
                 renderMobileSubcategories(cat.subcategories)}
             </div>
           ))}
+
+          {/* Static About & Contact Us for mobile */}
+          <NavLink
+            to="/about"
+            onClick={() => setMobileMenuOpen(false)}
+            className="text-lg font-semibold tracking-wide text-gray-700 hover:text-rose-600"
+          >
+            About
+          </NavLink>
+          <NavLink
+            to="/contact"
+            onClick={() => setMobileMenuOpen(false)}
+            className="text-lg font-semibold tracking-wide text-gray-700 hover:text-rose-600"
+          >
+            Contact Us
+          </NavLink>
         </ul>
       )}
     </header>

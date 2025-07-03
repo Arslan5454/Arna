@@ -3,13 +3,11 @@ import "./App.css";
 import AppLayout from "./components/layout/AppLayout";
 import About from "./components/pages/About";
 import Contact from "./components/pages/Contact";
-import Women from "./components/pages/Women";
 import Mens from "./components/pages/Mens";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import Home from "./components/pages/Home";
-import UnstitchedCategories from "./components/pages/UnstitchedCategories";
 import ProductDetail from "./components/ProductDetail/ProductDetail";
 import NotFound from "./components/pages/NotFound";
 import { CartProvider } from "./context/CartContext";
@@ -33,7 +31,6 @@ import CustomerLayout from "./components/customer/CustomerLayout";
 import CustomerDashboard from "./components/customer/CustomerDashboard";
 import MyOrders from "./components/customer/MyOrder";
 import CategoryProducts from "./components/pages/CategoryProducts";
-// import ProductDetail from './components/pages/WomensClothes/ProductDetail'
 
 function App() {
   const router = createBrowserRouter([
@@ -45,9 +42,7 @@ function App() {
         { path: "/", element: <Home /> },
         { path: "/about", element: <About /> },
         { path: "/contact", element: <Contact /> },
-        { path: "/women", element: <Women /> },
         { path: "/mens", element: <Mens /> },
-        { path: "/unstitched", element: <UnstitchedCategories /> },
         {
           path: "/category/:categoryId/product/:id",
           element: <ProductDetail />,

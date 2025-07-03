@@ -1,5 +1,5 @@
-import React from 'react';
-import { dummyCustomers } from '../../data/dummyCustomers';
+import React from "react";
+import { dummyCustomers } from "../../data/dummyCustomers";
 
 const CustomersPage = () => {
   return (
