@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { useCart } from "../../context/CartContext"; // ✅ global cart
+import { useCart } from "../../context/CartContext";
 import { useNavigate } from "react-router-dom";
-import { ShoppingBag, ClipboardList, MapPin, CreditCard } from "lucide-react";
+import { ShoppingBag, ClipboardList, CreditCard, Truck } from "lucide-react";
 
 const CheckoutPage = () => {
   const { cartItems, totalPrice } = useCart();
@@ -16,8 +16,8 @@ const CheckoutPage = () => {
     shippingMethod: "Standard",
     paymentMethod: "COD",
     coupon: "",
-    distanceMiles: "", // ✅ distance input field
   });
+  const [couponValid, setCouponValid] = useState(null); // feedback for coupon
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -38,26 +38,18 @@ const CheckoutPage = () => {
 
     const orderData = {
       form: {
-        name: form.name,
-        email: form.email,
-        phone: form.phone,
-        shippingAddress: form.shippingAddress,
+        ...form,
         billingAddress: form.sameAsShipping
           ? form.shippingAddress
           : form.billingAddress,
-        sameAsShipping: form.sameAsShipping,
-        shippingMethod: form.shippingMethod,
-        paymentMethod: form.paymentMethod,
-        coupon: form.coupon,
-        distanceMiles: parseFloat(form.distanceMiles) || 0,
       },
       amounts: {
-        shippingCharges: shippingCharges,
-        discount: discount,
+        shippingCharges,
+        discount,
         subtotal: totalPrice,
         totalAmount: finalTotal,
       },
-      cartItems: cartItems,
+      cartItems,
     };
 
     try {
@@ -69,9 +61,6 @@ const CheckoutPage = () => {
       const result = await res.json();
 
       if (res.ok) {
-        console.log("Order Response:", result);
-
-        // ✅ Navigate to confirmation page with order data
         navigate(`/order-confirmation/${result.order_id}`);
       } else {
         alert("Error placing order: " + result.error);
@@ -84,22 +73,20 @@ const CheckoutPage = () => {
 
   const calculateDiscount = () => {
     if (form.coupon.trim().toLowerCase() === "save10") {
-      return Math.floor(totalPrice * 0.1); // 10% discount
+      setCouponValid(true);
+      return Math.floor(totalPrice * 0.1);
+    } else if (form.coupon) {
+      setCouponValid(false);
     }
     return 0;
   };
 
   const calculateShippingCharges = () => {
-    const fixedDelivery = 300; // Fixed delivery charge
-    const miles = parseFloat(form.distanceMiles) || 0;
-
-    let extraCharges = 0;
-    if (miles > 9) {
-      const extraMiles = Math.ceil(miles - 9);
-      extraCharges = extraMiles * 100;
-    }
-
-    return fixedDelivery + extraCharges;
+    const perItemCharge = 250; // flat rate per product
+    return cartItems.reduce(
+      (sum, item) => sum + item.quantity * perItemCharge,
+      0
+    );
   };
 
   const shippingCharges = calculateShippingCharges();
@@ -110,7 +97,7 @@ const CheckoutPage = () => {
     <div className="max-w-7xl mx-auto py-12 px-4 md:px-8 grid grid-cols-1 md:grid-cols-2 gap-8 bg-white">
       {/* LEFT: CHECKOUT FORM */}
       <div className="space-y-6 border p-6 rounded shadow">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">
+        <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
           <ClipboardList className="text-rose-600" size={24} />
           Checkout Details
         </h2>
@@ -154,17 +141,6 @@ const CheckoutPage = () => {
             required
           />
 
-          <input
-            className="w-full border rounded p-3"
-            type="number"
-            min="0"
-            name="distanceMiles"
-            placeholder="Distance from Warehouse (in miles)"
-            value={form.distanceMiles}
-            onChange={handleChange}
-            required
-          />
-
           <div className="flex items-center gap-2">
             <input
               type="checkbox"
@@ -190,6 +166,7 @@ const CheckoutPage = () => {
 
           <div>
             <label className="block text-gray-700 font-medium mb-1">
+              <Truck size={16} className="inline text-rose-600 mr-1" />
               Shipping Method
             </label>
             <select
@@ -205,7 +182,7 @@ const CheckoutPage = () => {
 
           <div>
             <label className="block text-gray-700 font-medium mb-1">
-              <CreditCard size={16} className="text-rose-600" />
+              <CreditCard size={16} className="inline text-rose-600 mr-1" />
               Payment Method
             </label>
             <select
@@ -231,11 +208,22 @@ const CheckoutPage = () => {
               value={form.coupon}
               onChange={handleChange}
             />
+            {couponValid === true && (
+              <p className="text-green-600 text-sm mt-1">
+                Coupon applied successfully!
+              </p>
+            )}
+            {couponValid === false && (
+              <p className="text-red-600 text-sm mt-1">Invalid coupon code.</p>
+            )}
           </div>
 
           <button
             type="submit"
-            className="w-full bg-rose-600 text-white py-3 rounded hover:bg-rose-700 transition"
+            className="w-full bg-rose-600 text-white py-3 rounded hover:bg-rose-700 transition disabled:opacity-50"
+            disabled={
+              !form.name || !form.email || !form.phone || !form.shippingAddress
+            }
           >
             Place Order
           </button>
@@ -244,7 +232,7 @@ const CheckoutPage = () => {
 
       {/* RIGHT: ORDER SUMMARY */}
       <div className="border p-6 rounded shadow space-y-4 max-h-[80vh] overflow-y-auto">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">
+        <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
           <ShoppingBag className="text-rose-600" size={24} />
           Order Summary
         </h2>
@@ -258,7 +246,7 @@ const CheckoutPage = () => {
               className="flex items-center gap-4 border-b pb-4 last:border-b-0"
             >
               <img
-                src={Array.isArray(item.images) ? item.images[0] : item.image}
+                src={item.image}
                 alt={item.title}
                 className="w-16 h-16 rounded object-cover border"
               />
@@ -298,11 +286,22 @@ const CheckoutPage = () => {
               <span>Total</span>
               <span className="text-rose-600">PKR {finalTotal}</span>
             </div>
+
+            <p className="text-sm text-gray-500 mt-2">
+              Estimated delivery between <strong>{getEstimatedDate(3)}</strong>{" "}
+              and <strong>{getEstimatedDate(5)}</strong>.
+            </p>
           </>
         )}
       </div>
     </div>
   );
+};
+
+const getEstimatedDate = (daysFromNow) => {
+  const date = new Date();
+  date.setDate(date.getDate() + daysFromNow);
+  return date.toLocaleDateString(undefined, { day: "numeric", month: "short" });
 };
 
 export default CheckoutPage;
