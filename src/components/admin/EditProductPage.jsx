@@ -33,6 +33,11 @@ const EditProductPage = () => {
     if (product.newMainImage) {
       formData.append("newMainImage", product.newMainImage);
     }
+    if (product.newGalleryImages && product.newGalleryImages.length > 0) {
+      product.newGalleryImages.forEach((file) =>
+        formData.append("newGalleryImages[]", file)
+      );
+    }
     formData.append("_method", "PUT");
 
     try {
@@ -71,6 +76,7 @@ const EditProductPage = () => {
 
       <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-6">
         {[
+          // existing fields intact
           {
             name: "title",
             type: "text",
@@ -199,6 +205,48 @@ const EditProductPage = () => {
             className="w-full border p-4 rounded-xl file:mr-4 file:py-2 file:px-4 file:border-0 file:rounded-full file:bg-rose-600 file:text-white hover:file:bg-rose-700 transition"
             onChange={(e) =>
               setProduct({ ...product, newMainImage: e.target.files[0] })
+            }
+          />
+        </div>
+
+        {product.galleryImages && (
+          <motion.div
+            className="flex flex-col gap-2"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+          >
+            <label className="font-semibold text-gray-700">
+              Current Gallery Images:
+            </label>
+            <div className="flex flex-wrap gap-3">
+              {product.galleryImages.split(",").map((img, i) => (
+                <img
+                  key={i}
+                  src={`http://localhost/${img}`}
+                  alt={`Gallery ${i}`}
+                  className="w-28 h-28 object-cover rounded-xl border"
+                />
+              ))}
+            </div>
+          </motion.div>
+        )}
+
+        <div className="flex flex-col gap-2">
+          <label className="font-semibold text-gray-700">
+            Change Gallery Images:
+          </label>
+          <input
+            type="file"
+            name="newGalleryImages"
+            accept="image/*"
+            multiple
+            className="w-full border p-4 rounded-xl file:mr-4 file:py-2 file:px-4 file:border-0 file:rounded-full file:bg-rose-600 file:text-white hover:file:bg-rose-700 transition"
+            onChange={(e) =>
+              setProduct({
+                ...product,
+                newGalleryImages: Array.from(e.target.files),
+              })
             }
           />
         </div>
