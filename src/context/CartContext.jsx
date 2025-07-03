@@ -7,10 +7,10 @@ export const CartProvider = ({ children }) => {
 
   const addToCart = (product, quantity) => {
     setCartItems((prev) => {
-      const existing = prev.find((item) => item.title === product.title);
+      const existing = prev.find((item) => item.id === product.id);
       if (existing) {
         return prev.map((item) =>
-          item.title === product.title
+          item.id === product.id
             ? { ...item, quantity: item.quantity + quantity }
             : item
         );
@@ -22,18 +22,18 @@ export const CartProvider = ({ children }) => {
             quantity,
             image: Array.isArray(product.images)
               ? product.images[0]
-              : product.images,
+              : product.images || product.image, // fallback if images missing
           },
         ];
       }
     });
   };
 
-  const updateQuantity = (index, delta) => {
+  const updateQuantity = (id, delta) => {
     setCartItems((prev) =>
       prev
-        .map((item, idx) =>
-          idx === index
+        .map((item) =>
+          item.id === id
             ? { ...item, quantity: Math.max(1, item.quantity + delta) }
             : item
         )
@@ -41,8 +41,8 @@ export const CartProvider = ({ children }) => {
     );
   };
 
-  const removeItem = (index) => {
-    setCartItems((prev) => prev.filter((_, idx) => idx !== index));
+  const removeFromCart = (id) => {
+    setCartItems((prev) => prev.filter((item) => item.id !== id));
   };
 
   const clearCart = () => setCartItems([]);
@@ -54,12 +54,18 @@ export const CartProvider = ({ children }) => {
 
   return (
     <CartContext.Provider
-      value={{ cartItems, addToCart, updateQuantity, removeItem, clearCart, totalPrice }}
+      value={{
+        cartItems,
+        addToCart,
+        updateQuantity,
+        removeFromCart,
+        clearCart,
+        totalPrice,
+      }}
     >
       {children}
     </CartContext.Provider>
   );
 };
 
-// ✅ Make sure this hook is exported:
 export const useCart = () => useContext(CartContext);

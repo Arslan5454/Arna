@@ -40,14 +40,18 @@ const ProductDetail = () => {
 
   const handleAddToCart = () => {
     const cartItem = {
-      ...product,
-      image: `http://localhost/${product.mainImage}`,
+      id: product.id,
+      title: product.title,
+      price: Number(product.discountPrice || product.originalPrice || 0), // ✅ Always a number
+      image: product.mainImage
+        ? `http://localhost/${product.mainImage}`
+        : "/placeholder.png", // fallback if image missing
     };
+
     addToCart(cartItem, quantity);
     setQuantity(1);
     setIsAddToCartOpen(true);
   };
-
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   if (loading)
