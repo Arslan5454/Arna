@@ -48,8 +48,12 @@ function App() {
         { path: "/women", element: <Women /> },
         { path: "/mens", element: <Mens /> },
         { path: "/unstitched", element: <UnstitchedCategories /> },
-        { path: "/printed/:id", element: <ProductDetail /> },
-        { path: "/category/:id", element: <CategoryProducts /> },
+        {
+          path: "/category/:categoryId/product/:id",
+          element: <ProductDetail />,
+        },
+        { path: "/product/:id", element: <ProductDetail /> },
+        { path: "/category/:categoryId", element: <CategoryProducts /> },
         { path: "/checkout", element: <Checkout /> },
         { path: "/track-order/:trackingNumber", element: <TrackOrderPage /> },
         {
