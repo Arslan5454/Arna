@@ -50,19 +50,50 @@ const CreateProductPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
+      const formData = new FormData();
+
+      // Append all product text fields except mainImage/galleryImages
+      Object.entries(product).forEach(([key, value]) => {
+        if (
+          key !== "mainImage" &&
+          key !== "galleryImages" &&
+          value !== undefined &&
+          value !== null
+        ) {
+          formData.append(key, value);
+        }
+      });
+
+      // Append mainImage file if selected
+      if (product.mainImage && product.mainImage instanceof File) {
+        formData.append("mainImage", product.mainImage);
+      }
+
+      // Append galleryImages files if selected
+      if (product.galleryImages && Array.isArray(product.galleryImages)) {
+        product.galleryImages.forEach((img) =>
+          formData.append("galleryImages[]", img)
+        );
+      }
+
       const response = await fetch("http://localhost/api/products.php", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(product),
+        body: formData,
       });
-      if (!response.ok) throw new Error("Failed to create");
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Server error:", errorData);
+        throw new Error(errorData.error || "Failed to create product");
+      }
 
       alert("Product created successfully!");
       navigate("/admin/products");
     } catch (err) {
       console.error(err);
-      alert("Error creating product");
+      alert("Error creating product: " + err.message);
     }
   };
 
@@ -181,21 +212,28 @@ const CreateProductPage = () => {
           />
 
           <input
+            type="file"
             name="mainImage"
-            value={product.mainImage}
-            onChange={handleChange}
-            placeholder="Main Image URL"
+            accept="image/*"
+            onChange={(e) =>
+              setProduct({ ...product, mainImage: e.target.files[0] })
+            }
             className="border p-3 rounded w-full"
           />
 
           <input
+            type="file"
             name="galleryImages"
-            value={product.galleryImages}
-            onChange={handleChange}
-            placeholder="Gallery Images URLs (comma separated)"
+            accept="image/*"
+            multiple
+            onChange={(e) =>
+              setProduct({
+                ...product,
+                galleryImages: Array.from(e.target.files),
+              })
+            }
             className="border p-3 rounded w-full"
           />
-
           <input
             name="colors"
             value={product.colors}

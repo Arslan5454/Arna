@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 
 const EditProductPage = () => {
   const { productId } = useParams();
@@ -12,7 +12,7 @@ const EditProductPage = () => {
       .then((data) => {
         const found = data.find((p) => String(p.id) === productId);
         if (found) setProduct(found);
-        else alert('Product not found');
+        else alert("Product not found");
       })
       .catch(console.error);
   }, [productId]);
@@ -29,18 +29,19 @@ const EditProductPage = () => {
       const response = await fetch(
         `http://localhost/api/products.php?id=${productId}`,
         {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(product),
+          method: "POST", // PUT ki jagah POST
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ...product, _method: "PUT" }), // method override
         }
       );
-      if (!response.ok) throw new Error('Failed to update');
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Failed to update");
 
-      alert('Product updated successfully!');
-      navigate('/admin/products');
+      alert("Product updated successfully!");
+      navigate("/admin/products");
     } catch (err) {
       console.error(err);
-      alert('Error updating product');
+      alert("Error updating product: " + err.message);
     }
   };
 
@@ -148,21 +149,32 @@ const EditProductPage = () => {
           className="w-full border p-3 rounded"
         />
 
-        {/* IMAGES */}
-        <input
-          name="mainImage"
-          value={product.mainImage}
-          onChange={handleChange}
-          placeholder="Main Image URL"
-          className="w-full border p-3 rounded"
-        />
-        <input
-          name="galleryImages"
-          value={product.galleryImages}
-          onChange={handleChange}
-          placeholder="Gallery Images URLs (comma separated)"
-          className="w-full border p-3 rounded"
-        />
+        {product.mainImage && (
+          <div className="mb-4">
+            <label className="block font-medium">Current Main Image:</label>
+            <img
+              src={`http://localhost/${product.mainImage}`}
+              alt="Main"
+              className="w-40 h-40 object-cover rounded border"
+            />
+          </div>
+        )}
+
+        {product.galleryImages && (
+          <div className="mb-4">
+            <label className="block font-medium">Current Gallery Images:</label>
+            <div className="flex flex-wrap gap-3">
+              {product.galleryImages.split(",").map((img, i) => (
+                <img
+                  key={i}
+                  src={`http://localhost/${img}`}
+                  alt={`Gallery ${i}`}
+                  className="w-28 h-28 object-cover rounded border"
+                />
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* ATTRIBUTES */}
         <input

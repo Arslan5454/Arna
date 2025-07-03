@@ -11,9 +11,6 @@ import "swiper/css/pagination";
 import Home from "./components/pages/Home";
 import UnstitchedCategories from "./components/pages/UnstitchedCategories";
 import ProductDetail from "./components/ProductDetail/ProductDetail";
-import PrintedCloth from "./components/pages/WomensClothes/PrintedCloth";
-import FeaturedCloth from "./components/pages/WomensClothes/FeaturedCloth";
-import LawnCloth from "./components/pages/WomensClothes/LawnCloth";
 import NotFound from "./components/pages/NotFound";
 import { CartProvider } from "./context/CartContext";
 import Checkout from "./components/pages/Checkout";
@@ -35,6 +32,7 @@ import { ProtectedRoute } from "./components/protected/ProtectedRoute";
 import CustomerLayout from "./components/customer/CustomerLayout";
 import CustomerDashboard from "./components/customer/CustomerDashboard";
 import MyOrders from "./components/customer/MyOrder";
+import CategoryProducts from "./components/pages/CategoryProducts";
 // import ProductDetail from './components/pages/WomensClothes/ProductDetail'
 
 function App() {
@@ -51,11 +49,7 @@ function App() {
         { path: "/mens", element: <Mens /> },
         { path: "/unstitched", element: <UnstitchedCategories /> },
         { path: "/printed/:id", element: <ProductDetail /> },
-        { path: "/lawn/:id", element: <ProductDetail /> },
-        { path: "/featured/:id", element: <ProductDetail /> },
-        { path: "/printed", element: <PrintedCloth /> },
-        { path: "/featured", element: <FeaturedCloth /> },
-        { path: "/lawn", element: <LawnCloth /> },
+        { path: "/category/:id", element: <CategoryProducts /> },
         { path: "/checkout", element: <Checkout /> },
         { path: "/track-order/:trackingNumber", element: <TrackOrderPage /> },
         {
